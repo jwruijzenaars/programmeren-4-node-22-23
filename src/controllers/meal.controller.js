@@ -57,8 +57,8 @@ const mealController = {
       );
       next();
     } catch (err) {
-      res.status(400).json({
-        errCode: 400,
+      res.status(406).json({
+        errCode: 406,
         message: "Failed validation",
         error: err.toString(),
         datetime: new Date().toISOString(),
