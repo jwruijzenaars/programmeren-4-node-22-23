@@ -1,6 +1,7 @@
 const config = require("../config");
 const queries = require("./queries");
 const db = require("./database");
+const { renewToken } = require("../controllers/auth.controller");
 const logger = config.logger;
 
 const authDao = {
@@ -54,6 +55,19 @@ const authDao = {
         }
       }
     );
+  },
+
+  async renewToken(userId, callback) {
+    logger.trace("authDao renewToken called");
+    db.query(queries.TOKEN_RENEW, [userId], (err, results) => {
+      if (err) {
+        logger.trace("renewToken", err);
+        callback(err, undefined);
+      }
+      if (results) {
+        callback(undefined, results);
+      }
+    });
   },
 };
 

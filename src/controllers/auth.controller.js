@@ -196,6 +196,7 @@ const authController = {
         }
         else {
             const token = authHeader.substring(7, authHeader.length);
+            let payload = null;
             jwt.verify(token, jwtSecretKey, (err, payload) => {
                 if (err) {
                     logger.warn("Not authorized");
@@ -205,13 +206,40 @@ const authController = {
                     });
                 }
                 if (payload) {
+                    payload = payload;
                     logger.debug("token is valid", payload);
-                    const newPayload = {
-                        id: payload.id
+                    
+                }
+            });
+            await authDao.renewToken(payload.id, (err, result) => {
+                if(err) {
+                    res.status(500).json({
+                        errCode: 500,
+                        message: "Internal server error",
+                        error: err.toString(),
+                        datetime: new Date().toISOString()
+                    });
+                } else {
+                    const user = result.rows[0];
+                    const payload = {
+                        id: user.id
                     };
-                    const newToken = jwt.sign(newPayload, jwtSecretKey, { expiresIn: "2h" });
+                    const userInfo = {
+                        id: user.id,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        emailAdress: user.emailadress,
+                        phoneNumber: user.phonenumber,
+                        roles: user.roles,
+                        isActive: user.isactive,
+                        street: user.street,
+                        city: user.city,
+                        token: jwt.sign(payload, jwtSecretKey, { expiresIn: "2h" })
+                    };
                     res.status(200).json({
-                        token: newToken,
+                        errCode: 200,
+                        message: "Token renewed",
+                        user: userInfo,
                         datetime: new Date().toISOString()
                     });
                 }
