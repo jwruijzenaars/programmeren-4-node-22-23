@@ -1,3 +1,8 @@
+const logger = require("../config").logger;
+const participationDao = require("../daos/participation.dao");
+const utils = require("../utils");
+const assert = require("assert");
+
 const praticipationController = {
   async validateParticipation(req, res, next) {
     try {
