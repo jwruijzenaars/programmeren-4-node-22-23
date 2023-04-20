@@ -65,7 +65,8 @@ const userController = {
   async getOwn(req, res, next) {
     logger.trace("userController getOwn called");
     try {
-      await userDao.getOwn(req.params.id, (err, result) => {
+
+      await userDao.getOwn(req.UserID, (err, result) => {
         utils.handleResult(res, next, err, result);
       });
     } catch (err) {

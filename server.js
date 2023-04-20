@@ -13,9 +13,9 @@ const app = express();
 const port = process.env.PORT || 3003;
 const systemInfo = {
     systemInfo: {
-        name: "programmeren-4-node-22-23",
+        studentName: "Jan Willem Ruijzenaars",
+        studentNumber: 2150617,
         description: "A system for students to manage their meals in their student homes",
-        author: "Jan Willem Ruijzenaars",
     }
 }
 

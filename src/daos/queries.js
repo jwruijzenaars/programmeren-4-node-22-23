@@ -21,9 +21,9 @@ module.exports = {
     PARTICIPATION_DELETE:
       "DELETE FROM `meal_participants_user` WHERE mealId = ? AND userId = ?",
     PARTICIPATION_SELECT_ONE:
-      "SELECT firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE id = ?",
+    "SELECT firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user LEFT JOIN meal_participants_user ON user.id = meal_participants_user.userId WHERE meal_participants_user.mealId = ? AND user.id = ?",
     PARTICIPATION_SELECT_ALL:
-      "SELECT * FROM user LEFT JOIN meal_participants_user ON user.id = meal_participants_user.userId WHERE meal_participants_user.mealId = ?",
+      "SELECT firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user LEFT JOIN meal_participants_user ON user.id = meal_participants_user.userId WHERE meal_participants_user.mealId = ?",
     CLEAR_DB_USER: "DELETE IGNORE FROM user",
     CLEAR_DB_MEAL: "DELETE IGNORE FROM meal",
     CLEAR_DB_PARTICIPATION: "DELETE IGNORE FROM meal_participants_user"
