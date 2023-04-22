@@ -1,7 +1,6 @@
 const config = require("../config");
 const queries = require("./queries");
 const db = require("./database");
-const { renewToken } = require("../controllers/auth.controller");
 const logger = config.logger;
 
 const authDao = {
@@ -32,7 +31,7 @@ const authDao = {
       city,
     } = body;
 
-    connection.query(
+    db.query(
       queries.USER_CREATE,
       [
         firstName,

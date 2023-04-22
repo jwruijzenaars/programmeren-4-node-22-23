@@ -6,9 +6,9 @@ module.exports = {
     MEAL_UPDATE:
       "UPDATE meal SET isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, dateTime = ?, maxAmountOfParticipants = ?, price = ?, imageUrl = ?, cookId = ?, createDate = ?, updateDate = ?, name = ?, description = ?, allergenes = ? WHERE id = ?",
     MEAL_DELETE: "DELETE FROM meal WHERE id = ?",
-    USER_SELECT_ALL: "SELECT firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user",
+    USER_SELECT_ALL: "SELECT id, firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user",
     USER_SELECT_OWN_PROFILE: "SELECT * FROM user WHERE id = ?",
-    USER_SELECT_ONE: "SELECT firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE id = ?",
+    USER_SELECT_ONE: "SELECT id, firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE id = ?",
     USER_UPDATE:
       "UPDATE user SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?",
     USER_DELETE: "DELETE FROM user WHERE id = ?",
@@ -16,6 +16,9 @@ module.exports = {
       "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     USER_LOGIN: "SELECT * FROM user WHERE emailAdress = ?",
     TOKEN_RENEW: "SELECT * FROM user WHERE id = ?",
+    USER_PER_CITY: "SELECT id, firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE city = ?",
+    USER_PER_ROLES: "SELECT id, firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE roles like ?",
+    USER_PER_CITY_AND_ROLES: "SELECT id, firstName, lastName, isActive, emailAdress, phoneNumber, roles, street, city FROM user WHERE city = ? AND roles like ?",
     PARTICIPATION_CREATE:
       "INSERT INTO `meal_participants_user` (mealId, userId) VALUES (?, ?)",
     PARTICIPATION_DELETE:

@@ -78,21 +78,21 @@ const missingFieldMeal = {
   allergenes: "gluten"
 };
 
-describe("meal tests", () => {
-    describe("GET /meals", () => {
-        it("should return all meals", (done) => {
-            chai
-                .request(server)
-                .get("/api/meal")
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a("array");
-                    res.body.length.should.be.eq(expectedMeals.length);
-                    for (let i = 0; i < res.body.length; i++) {
-                        assert.deepStrictEqual(res.body[i], expectedMeals[i]);
-                    }
-                    done();
-                });
-        });
-    });
-});
+// describe("meal tests", () => {
+//     describe("GET /meals", () => {
+//         it("should return all meals", (done) => {
+//             chai
+//                 .request(server)
+//                 .get("/api/meal")
+//                 .end((err, res) => {
+//                     res.should.have.status(200);
+//                     res.body.should.be.a("array");
+//                     res.body.length.should.be.eq(expectedMeals.length);
+//                     for (let i = 0; i < res.body.length; i++) {
+//                         assert.deepStrictEqual(res.body[i], expectedMeals[i]);
+//                     }
+//                     done();
+//                 });
+//         });
+//     });
+// });

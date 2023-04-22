@@ -2,16 +2,17 @@ const express = require('express');
 const router = express.Router();
 const mealController = require('../controllers/meal.controller');
 const participationController = require('../controllers/participation.controller');
+const authController = require('../controllers/auth.controller');
 
 router.get('/', mealController.getAll);
-router.get('/:id', mealController.getOne);
-router.post('/', mealController.validateMeal, mealController.create);
-router.put('/:id', mealController.validateMeal, mealController.update);
-router.delete('/:id', mealController.delete);
+router.get('/:mealId', mealController.getOne);
+router.post('/', authController.validateToken, mealController.validateMeal, mealController.create);
+router.put('/:mealId', authController.validateToken, mealController.validateMeal, mealController.update);
+router.delete('/:mealId', authController.validateToken, mealController.delete);
 
-router.post('/:mealId/participate', participationController.validateParticipation, participationController.createParticipation);
-router.put('/:mealId/participate', participationController.deleteParticipation);
-router.get('/:mealId/participate', participationController.getParticipants);
-router.get('/:mealId/participate/:userId', participationController.getParticipant);
+router.post('/:mealId/participate', authController.validateToken, participationController.validateParticipation, participationController.createParticipation);
+router.put('/:mealId/participate', authController.validateToken, participationController.deleteParticipation);
+router.get('/:mealId/participate', authController.validateToken, participationController.getParticipants);
+router.get('/:mealId/participate/:userId', authController.validateToken, participationController.getParticipant);
 
 module.exports = router;

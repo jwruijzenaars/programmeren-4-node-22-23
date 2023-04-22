@@ -21,13 +21,25 @@ const praticipationController = {
 
   async createParticipation(req, res) {
     try {
-      await participationDao.createParticipation(req.params.mealId, req.body.userId, (err, result) => {
-        res.status(200).send({
-          status: 200,
-          message: `User with ID ${req.body.userId} is signed up for meal with ID ${req.params.mealId}`,
-          datetime: new Date().toISOString(),
-        })
-      });
+      await participationDao.createParticipation(
+        req.params.mealId,
+        req.body.userId,
+        (err, result) => {
+          if (err) {
+            res.status(409).send({
+              status: 409,
+              message: `User with ID ${req.body.userId} is couldn't be signed up for meal with ID ${req.params.mealId}`,
+              datetime: new Date().toISOString(),
+            });
+          } else {
+            res.status(201).send({
+              status: 201,
+              message: `User with ID ${req.body.userId} is signed up for meal with ID ${req.params.mealId}`,
+              datetime: new Date().toISOString(),
+            });
+          }
+        }
+      );
     } catch (err) {
       utils.handleResult(res, next, err, null);
     }
@@ -35,9 +47,12 @@ const praticipationController = {
 
   async getParticipants(req, res) {
     try {
-      await participationDao.getParticipants(req.params.mealId, (err, result) => {
-        utils.handleResult(res, next, err, result);
-      });
+      await participationDao.getParticipants(
+        req.params.mealId,
+        (err, result) => {
+          utils.handleResult(res, next, err, result);
+        }
+      );
     } catch (err) {
       utils.handleResult(res, next, err, null);
     }
@@ -45,9 +60,13 @@ const praticipationController = {
 
   async getParticipant(req, res) {
     try {
-      await participationDao.getParticipant(req.params.mealId, req.params.userId, (err, result) => {
-        utils.handleResult(res, next, err, result);
-      });
+      await participationDao.getParticipant(
+        req.params.mealId,
+        req.params.userId,
+        (err, result) => {
+          utils.handleResult(res, next, err, result);
+        }
+      );
     } catch (err) {
       utils.handleResult(res, next, err, null);
     }
@@ -55,13 +74,17 @@ const praticipationController = {
 
   async deleteParticipation(req, res) {
     try {
-      await participationDao.delete(req.params.mealId, req.body.userId, (err, result) => {
-        res.status(200).send({
-          status: 200,
-          message: `User with ID ${req.body.userId} is signed off for meal with ID ${req.params.mealId}`,
-          datetime: new Date().toISOString(),
-        })
-      });
+      await participationDao.delete(
+        req.params.mealId,
+        req.body.userId,
+        (err, result) => {
+          res.status(200).send({
+            status: 200,
+            message: `User with ID ${req.body.userId} is signed off for meal with ID ${req.params.mealId}`,
+            datetime: new Date().toISOString(),
+          });
+        }
+      );
     } catch (err) {
       utils.handleResult(res, next, err, null);
     }

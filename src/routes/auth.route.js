@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth.controller');
 
-router.post('/login', authController.validateLogin, authController.login);
-router.post('/register', authController.validateRegister, authController.register);
+router.post('/', authController.validateLogin, authController.login);
 router.get("/renew", authController.renewToken);
 
 module.exports = router;
