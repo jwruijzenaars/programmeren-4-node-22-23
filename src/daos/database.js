@@ -6,7 +6,6 @@ const dbTestConfig = require("../config").dbTestConfig;
 
 config();
 
-let pool;
 if (process.env.NODE_ENV === "test") {
   pool = mysql.createPool(dbTestConfig);
   logger.trace("Connected to database: " + dbTestConfig.database);

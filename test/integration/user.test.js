@@ -5,7 +5,10 @@ const server = require("../../server");
 const queries = require("../../src/daos/queries");
 const logger = require("../../src/config").logger;
 const jwt = require("jsonwebtoken");
-const pool = require("../../src/daos/database").pool;
+const dbTestConfig = require("../../src/config").dbTestConfig;
+const mysql = require("mysql");
+const pool = mysql.createPool(dbTestConfig);
+logger.trace("Connected to database: " + dbTestConfig.database);
 
 chai.should();
 chai.use(chaiHttp);
