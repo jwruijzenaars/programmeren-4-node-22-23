@@ -21,6 +21,7 @@ const systemInfo = {
 
 app.use(express.json());
 app.use(function (req, res, next) {
+  res.setHeader("SameSite", "None");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
