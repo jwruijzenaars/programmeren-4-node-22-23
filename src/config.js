@@ -16,12 +16,20 @@ module.exports = {
         maxActive: 10,
     },
 
-    // dbTestConfig: {
-    //   host: process.env.TEST_DB_HOST,
-    //   user: process.env.TEST_DB_USER,
-    //   database: process.env.TEST_DB,
-    //   user: process.env.TEST_DB_USER
-    // },
+    dbTestConfig: {
+        host: process.env.TEST_DB_HOST || "localhost",
+        user: process.env.TEST_DB_USER || "root",
+        database: process.env.DB_DATABASE || "programmeren-4-test",
+        password: process.env.TEST_DB_PASSWORD,
+        port: process.env.TEST_DB_PORT || 3306,
+        multipleStatements: true,
+        connectionLimit: 10,
+        waitForConnections: true,
+        queueLimit: 0,
+        idleTimeout: 10000,
+        maxIdle: 10,
+        maxActive: 10,
+    },
 
     jwtSecretKey: process.env.SECRET,
     logger: require("tracer").console({

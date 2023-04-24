@@ -2,17 +2,18 @@ const mysql = require("mysql");
 const { config } = require("dotenv");
 const dbConfig = require("../config").dbConfig;
 const logger = require("../config").logger;
-// const dbTestConfig = require("../config").dbTestConfig;
+const dbTestConfig = require("../config").dbTestConfig;
 
 config();
 
-// if (process.env.NODE_ENV === "test") {
-//   pool = mysql.createPool(dbTestConfig);
-//   logger.trace("Connected to database: " + dbTestConfig.database);
-// } else if (process.env.NODE_ENV === "development") {
- const pool = mysql.createPool(dbConfig);
+let pool;
+if (process.env.NODE_ENV === "test") {
+  pool = mysql.createPool(dbTestConfig);
+  logger.trace("Connected to database: " + dbTestConfig.database);
+} else if (process.env.NODE_ENV === "development") {
+  pool = mysql.createPool(dbConfig);
   logger.trace("Connected to database: " + dbConfig.database);
-// }
+}
 
 pool.on("connection", function (connection) {
   logger.trace("Database connection established");
@@ -27,33 +28,22 @@ pool.on("release", function (connection) {
 });
 
 let query = (sqlQuery, sqlValues, callback) => {
-
-  // pool.query(sqlQuery, sqlValues, (error, results, fields) => {
-  //   if (error) {
-  //     logger.error("query", error.toString());
-  //     callback(error.message, undefined);
-  //   }
-  //   if (results) {
-  //     callback(undefined, results);
-  //   }
-  // });
-
   pool.getConnection(function (err, connection) {
     if (err) {
       logger.error(err.message);
       callback(err.message, undefined);
     }
 
-      connection.query(sqlQuery, sqlValues, (error, results, fields) => {
-        connection.release();
-        if (error) {
-          logger.error("query", error.toString());
-          callback(error.message, undefined);
-        }
-        if (results) {
-          callback(undefined, results);
-        }
-      });
+    connection.query(sqlQuery, sqlValues, (error, results, fields) => {
+      connection.release();
+      if (error) {
+        logger.error("query", error.toString());
+        callback(error.message, undefined);
+      }
+      if (results) {
+        callback(undefined, results);
+      }
+    });
   });
 };
 
