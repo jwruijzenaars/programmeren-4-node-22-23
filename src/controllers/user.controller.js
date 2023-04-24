@@ -420,18 +420,26 @@ const userController = {
   async delete(req, res, next) {
     logger.trace("userController delete called");
     try {
-      if (req.userId === req.params.userId) {
+      if (req.userId === Number(req.params.userId)) {
         await userDao.delete(req.params.userId, (err, result) => {
-          res.status(200).send({
-            status: 200,
-            message: `User with Id ${req.params.userId} is deleted`,
-            datetime: new Date().toISOString(),
-          });
+          if (result.affectedRows === 0) {
+            res.status(404).send({
+              status: 404,
+              message: `Couldn't find user with Id ${req.params.userId} to delete`,
+              datetime: new Date().toISOString(),
+            });
+          } else {
+            res.status(200).send({
+              status: 200,
+              message: `User with Id ${req.params.userId} is deleted`,
+              datetime: new Date().toISOString(),
+            });
+          }
         });
       } else {
         res.status(401).send({
           status: 401,
-          message: "Not authorized",
+          message: "Not authorized to delete another user",
           datetime: new Date().toISOString(),
         });
       }

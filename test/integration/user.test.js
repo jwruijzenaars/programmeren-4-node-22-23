@@ -5,6 +5,7 @@ const server = require("../../server");
 const queries = require("../../src/daos/queries");
 const logger = require("../../src/config").logger;
 const jwt = require("jsonwebtoken");
+const pool = require("../../src/daos/database").pool;
 
 chai.should();
 chai.use(chaiHttp);
@@ -576,9 +577,7 @@ describe("user tests", () => {
             .send(updatedUser)
             .end((err, res) => {
               res.should.have.status(401);
-              res.body.should.have
-                .property("message")
-                .eq(`Not authorized`);
+              res.body.should.have.property("message").eq(`Not authorized`);
               res.body.should.have.property("status").eq(401);
               done();
             });
@@ -710,5 +709,92 @@ describe("user tests", () => {
   });
 
   describe("TC-206 delete user", () => {
+    it("TC-206-1 should fail, user doesn't exist", (done) => {
+      const userId = 0;
+      const payload = {
+        id: userId,
+      };
+      const userToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        expiresIn: "1h",
+      });
+      logger.debug("userToken: " + userToken)
+      chai
+        .request(server)
+        .delete("/api/user/" + 0)
+        .auth(userToken, { type: "bearer" })
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have
+            .property("message")
+            .eq(`Couldn't find user with Id ${userId} to delete`);
+          res.body.should.have.property("status").eq(404);
+          done();
+        });
+    });
+
+    it("TC-206-2 should fail, not logged in(no auth header)", (done) => {
+      chai
+        .request(server)
+        .delete("/api/user/" + 0)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.have
+            .property("message")
+            .eq(`Authorization header missing!`);
+          res.body.should.have.property("status").eq(401);
+          done();
+        });
+    });
+
+    it("TC-206-3 should fail, user is not owner of data", (done) => {
+      let userToken;
+      let userId;
+      chai
+        .request(server)
+        .post("/api/user/")
+        .send(expectedUser)
+        .end((err, res) => {
+          userId = res.body.data.id;
+          userToken = res.body.data.token;
+          chai
+            .request(server)
+            .delete("/api/user/0")
+            .auth(userToken, { type: "bearer" })
+            .end((err, res) => {
+              res.should.have.status(401);
+              res.body.should.have
+                .property("message")
+                .eq(`Not authorized to delete another user`);
+              res.body.should.have.property("status").eq(401);
+              done();
+            });
+        });
+
+    });
+
+    it("TC-206-4 should delete user", (done) => {
+      let userToken;
+      let userId;
+      chai
+        .request(server)
+        .post("/api/user/")
+        .send(expectedUser)
+        .end((err, res) => {
+          userId = res.body.data.id;
+          userToken = res.body.data.token;
+          chai
+            .request(server)
+            .delete("/api/user/" + userId)
+            .auth(userToken, { type: "bearer" })
+            .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.have
+                .property("message")
+                .eq(`User with Id ${userId} is deleted`);
+              res.body.should.have.property("status").eq(200);
+              done();
+            });
+        });
+    });
   });
 });
