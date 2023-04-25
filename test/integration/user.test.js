@@ -6,7 +6,7 @@ const queries = require("../../src/daos/queries");
 const logger = require("../../src/config").logger;
 const jwt = require("jsonwebtoken");
 const dbTestConfig = require("../../src/config").dbTestConfig;
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const pool = mysql.createPool(dbTestConfig);
 logger.trace("Connected to database: " + dbTestConfig.database);
 
