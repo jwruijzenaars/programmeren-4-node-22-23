@@ -16,9 +16,12 @@
     "tracer": "^1.1.6"
   },
   "scripts": {
-    "start": "set NODE_ENV=development&& node server.js",
-    "dev": "set NODE_ENV=development&& nodemon server.js",
-    "test": "set NODE_ENV=test&& mocha -reporter spec test/**/*.test.js --exit"
+    "start:dev": "set NODE_ENV=development&& node server.js",
+    "dev:dev": "set NODE_ENV=development&& nodemon server.js",
+    "test:dev": "set NODE_ENV=test&& mocha -reporter spec test/**/*.test.js --exit",
+    "start": "NODE_ENV=development&& node server.js",
+    "dev": "NODE_ENV=development&& nodemon server.js",
+    "test": "NODE_ENV=test&& mocha -reporter spec test/**/*.test.js --exit"
   },
   "name": "programmeren-4-node-22-23",
   "description": "To make it easy for you to get started with GitLab, here's a list of recommended next steps.",
