@@ -56,96 +56,96 @@ const userController = {
     }
   },
 
-  async getFiltered(req, res, next) {
-    logger.trace("userController getFiltered called");
-    try {
-      if (req.params.city && req.params.roles) {
-        await userDao.getByCityAndRoles(
-          req.params.city,
-          req.params.roles,
-          (err, result) => {
-            if (result.length === 0) {
-              res.status(404).send({
-                status: 404,
-                message: `No users found`,
-                datetime: new Date().toISOString(),
-              });
-            }
-            if (result) {
-              res.status(200).send({
-                status: 200,
-                message: `Got all users filtered by city and roles`,
-                resultCount: result.length,
-                data: result,
-              });
-            } else {
-              res.status(400).send({
-                status: 400,
-                message: `Couldn't get users`,
-                datetime: new Date().toISOString(),
-              });
-            }
-          }
-        );
-      } else if (req.params.city) {
-        await userDao.getByCity(req.params.city, (err, result) => {
-          if (result.length === 0) {
-            res.status(404).send({
-              status: 404,
-              message: `No users found`,
-              datetime: new Date().toISOString(),
-            });
-          }
-          if (result) {
-            res.status(200).send({
-              status: 200,
-              message: `Got all users filtered by city`,
-              resultCount: result.length,
-              data: result,
-            });
-          } else {
-            res.status(400).send({
-              status: 400,
-              message: `Couldn't get users`,
-              datetime: new Date().toISOString(),
-            });
-          }
-        });
-      } else if (req.params.roles) {
-        await userDao.getByRoles(req.params.roles, (err, result) => {
-          if (result.length === 0) {
-            res.status(404).send({
-              status: 404,
-              message: `No users found`,
-              datetime: new Date().toISOString(),
-            });
-          }
-          if (result) {
-            res.status(200).send({
-              status: 200,
-              message: `Got all users filtered by roles`,
-              resultCount: result.length,
-              data: result,
-            });
-          } else {
-            res.status(400).send({
-              status: 400,
-              message: `Couldn't get users`,
-              datetime: new Date().toISOString(),
-            });
-          }
-        });
-      } else {
-        await this.getall(req, res, next);
-      }
-    } catch (err) {
-      res.status(400).send({
-        status: 400,
-        message: `Couldn't get users`,
-        datetime: new Date().toISOString(),
-      });
-    }
-  },
+  // async getFiltered(req, res, next) {
+  //   logger.trace("userController getFiltered called");
+  //   try {
+  //     if (req.params.city && req.params.roles) {
+  //       await userDao.getByCityAndRoles(
+  //         req.params.city,
+  //         req.params.roles,
+  //         (err, result) => {
+  //           if (result.length === 0) {
+  //             res.status(404).send({
+  //               status: 404,
+  //               message: `No users found`,
+  //               datetime: new Date().toISOString(),
+  //             });
+  //           }
+  //           if (result) {
+  //             res.status(200).send({
+  //               status: 200,
+  //               message: `Got all users filtered by city and roles`,
+  //               resultCount: result.length,
+  //               data: result,
+  //             });
+  //           } else {
+  //             res.status(400).send({
+  //               status: 400,
+  //               message: `Couldn't get users`,
+  //               datetime: new Date().toISOString(),
+  //             });
+  //           }
+  //         }
+  //       );
+  //     } else if (req.params.city) {
+  //       await userDao.getByCity(req.params.city, (err, result) => {
+  //         if (result.length === 0) {
+  //           res.status(404).send({
+  //             status: 404,
+  //             message: `No users found`,
+  //             datetime: new Date().toISOString(),
+  //           });
+  //         }
+  //         if (result) {
+  //           res.status(200).send({
+  //             status: 200,
+  //             message: `Got all users filtered by city`,
+  //             resultCount: result.length,
+  //             data: result,
+  //           });
+  //         } else {
+  //           res.status(400).send({
+  //             status: 400,
+  //             message: `Couldn't get users`,
+  //             datetime: new Date().toISOString(),
+  //           });
+  //         }
+  //       });
+  //     } else if (req.params.roles) {
+  //       await userDao.getByRoles(req.params.roles, (err, result) => {
+  //         if (result.length === 0) {
+  //           res.status(404).send({
+  //             status: 404,
+  //             message: `No users found`,
+  //             datetime: new Date().toISOString(),
+  //           });
+  //         }
+  //         if (result) {
+  //           res.status(200).send({
+  //             status: 200,
+  //             message: `Got all users filtered by roles`,
+  //             resultCount: result.length,
+  //             data: result,
+  //           });
+  //         } else {
+  //           res.status(400).send({
+  //             status: 400,
+  //             message: `Couldn't get users`,
+  //             datetime: new Date().toISOString(),
+  //           });
+  //         }
+  //       });
+  //     } else {
+  //       await this.getall(req, res, next);
+  //     }
+  //   } catch (err) {
+  //     res.status(400).send({
+  //       status: 400,
+  //       message: `Couldn't get users`,
+  //       datetime: new Date().toISOString(),
+  //     });
+  //   }
+  // },
 
   async getAll(req, res, next) {
     logger.trace("userController getAll called");

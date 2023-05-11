@@ -26,6 +26,16 @@ function getCompleteMeal(rawMeal, userId) {
 const mealController = {
   async validateMeal(req, res, next) {
     try {
+      assert(
+        typeof req.body.isActive === "number",
+        "isActive must be a number."
+      );
+      assert(typeof req.body.isVega === "number", "isVega must be a number.");
+      assert(typeof req.body.isVegan === "number", "isVegan must be a number.");
+      assert(
+        typeof req.body.isToTakeHome === "number",
+        "isToTakeHome must be a number."
+      );
       assert(typeof req.body.dateTime === "string", "dateTime must be a date.");
 
       assert(
@@ -39,11 +49,11 @@ const mealController = {
       );
       assert(
         typeof req.body.createDate === "string",
-        "createDate must be a date."
+        "createDate must be a datestring."
       );
       assert(
         typeof req.body.updateDate === "string",
-        "updateDate must be a date."
+        "updateDate must be a datestring."
       );
       assert(typeof req.body.name === "string", "name must be a string.");
       assert(
@@ -56,8 +66,8 @@ const mealController = {
       );
       next();
     } catch (err) {
-      res.status(406).json({
-        errCode: 406,
+      res.status(400).json({
+        status: 400,
         message: "Failed validation",
         error: err.toString(),
         datetime: new Date().toISOString(),
@@ -70,6 +80,7 @@ const mealController = {
     try {
       const userId = req.userId;
       const meal = getCompleteMeal(req.body, userId);
+      logger.debug("mealController create meal: " + JSON.stringify(meal));
       await mealDao.create(meal, (err, result) => {
         if (result) {
           if (result.length === 0) {
@@ -79,11 +90,29 @@ const mealController = {
               datetime: new Date().toISOString(),
             });
           } else {
-            res.status(201).json({
-              status: 201,
-              message: "Meal created",
-              data: result.rows[0],
-              datetime: new Date().toISOString(),
+            mealDao.getOne(result.insertId, (err, result) => {
+              if (result) {
+                if (result.length === 0) {
+                  res.status(400).json({
+                    status: 400,
+                    message: "Failed to create meal",
+                    datetime: new Date().toISOString(),
+                  });
+                } else {
+                  res.status(201).json({
+                    status: 201,
+                    message: "Meal created",
+                    data: result[0],
+                    datetime: new Date().toISOString(),
+                  });
+                }
+              } else {
+                res.status(400).json({
+                  status: 400,
+                  message: "Failed to create meal",
+                  datetime: new Date().toISOString(),
+                });
+              }
             });
           }
         } else {
@@ -118,7 +147,7 @@ const mealController = {
             res.status(200).json({
               status: 200,
               message: "Meals retrieved",
-              data: result.rows,
+              data: result,
               datetime: new Date().toISOString(),
             });
           }
@@ -173,8 +202,10 @@ const mealController = {
     logger.trace("mealController update called");
     try {
       const userId = req.userId;
-      const meal = getCompleteMeal(req.body, userId);
-      if (meal.cookId === userId) {
+      const bodyId = req.body.cookId;
+
+      if (Number(bodyId) === Number(userId)) {
+        const meal = getCompleteMeal(req.body, userId);
         await mealDao.update(req.params.mealId, meal, (err, result) => {
           if (result) {
             if (result.length === 0) {
@@ -184,11 +215,29 @@ const mealController = {
                 datetime: new Date().toISOString(),
               });
             } else {
-              res.status(200).json({
-                status: 200,
-                message: "Meal updated",
-                data: result.rows[0],
-                datetime: new Date().toISOString(),
+              mealDao.getOne(req.params.mealId, (err, result) => {
+                if (result) {
+                  if (result.length === 0) {
+                    res.status(404).json({
+                      status: 404,
+                      message: "Couldn't find meal to update",
+                      datetime: new Date().toISOString(),
+                    });
+                  } else {
+                    res.status(200).json({
+                      status: 200,
+                      message: "Meal updated",
+                      data: result[0],
+                      datetime: new Date().toISOString(),
+                    });
+                  }
+                } else {
+                  res.status(400).json({
+                    status: 400,
+                    message: "Couldn't update meal with id: " + req.params.mealId,
+                    datetime: new Date().toISOString(),
+                  });
+                }
               });
             }
           } else {
@@ -203,7 +252,7 @@ const mealController = {
         res.status(403).json({
           status: 403,
           message:
-            "Not authorized to update meal with id: " + req.params.mealId,
+            "Not authorized to update a meal that isn't yours.",
           datetime: new Date().toISOString(),
         });
       }
@@ -232,21 +281,21 @@ const mealController = {
         }
       });
       if (oldMeal.cookId === req.userId) {
-      await mealDao.delete(req.params.mealId, (err, result) => {
-        if(err) {
-          res.status(400).json({
-            status: 400,
-            message: "Couldn't delete meal with id: " + req.params.mealId,
-            datetime: new Date().toISOString(),
-          });
-        } else {
-          res.status(200).json({
-            status: 200,
-            message: `Meal with id ${oldMeal.id} deleted`,
-            datetime: new Date().toISOString(),
-          });
-        }
-      });
+        await mealDao.delete(req.params.mealId, (err, result) => {
+          if (err) {
+            res.status(400).json({
+              status: 400,
+              message: "Couldn't delete meal with id: " + req.params.mealId,
+              datetime: new Date().toISOString(),
+            });
+          } else {
+            res.status(200).json({
+              status: 200,
+              message: `Meal with id ${oldMeal.id} deleted`,
+              datetime: new Date().toISOString(),
+            });
+          }
+        });
       } else {
         res.status(403).json({
           status: 403,

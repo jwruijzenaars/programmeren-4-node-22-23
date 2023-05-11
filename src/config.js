@@ -13,7 +13,6 @@ module.exports = {
         queueLimit: 0,
         idleTimeout: 10000,
         maxIdle: 10,
-        maxActive: 10,
     },
 
     dbTestConfig: {
@@ -28,7 +27,6 @@ module.exports = {
         queueLimit: 0,
         idleTimeout: 10000,
         maxIdle: 10,
-        maxActive: 10,
     },
 
     jwtSecretKey: process.env.SECRET,
