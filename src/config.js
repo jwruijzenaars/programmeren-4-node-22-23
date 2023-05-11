@@ -18,7 +18,7 @@ module.exports = {
     dbTestConfig: {
         host: process.env.TEST_DB_HOST || "localhost",
         user: process.env.TEST_DB_USER || "root",
-        database: process.env.DB_DATABASE || "programmeren-4-test",
+        database: process.env.TEST_DB_DATABASE || "programmeren-4-test",
         password: process.env.TEST_DB_PASSWORD,
         port: process.env.TEST_DB_PORT || 3306,
         multipleStatements: true,

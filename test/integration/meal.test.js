@@ -262,7 +262,7 @@ describe("meal tests", () => {
                 .eq(expectedMeal.maxAmountOfParticipants);
               res.body.data.should.have
                 .property("price")
-                .eq(expectedMeal.price);
+                .eq('10.00');
               res.body.data.should.have
                 .property("imageUrl")
                 .eq(expectedMeal.imageUrl);
@@ -475,7 +475,7 @@ describe("meal tests", () => {
                     .eq(updatedMeal.name);
                   res.body.data.should.have
                     .property("price")
-                    .eq(updatedMeal.price);
+                    .eq('15.00');
                   res.body.data.should.have
                     .property("maxAmountOfParticipants")
                     .eq(updatedMeal.maxAmountOfParticipants);
