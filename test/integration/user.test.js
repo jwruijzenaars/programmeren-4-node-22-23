@@ -128,6 +128,26 @@ const updatedUser = {
   city: "Tilburg",
 };
 
+describe("systeminfo test", () => {
+  describe("TC-102 get systeminfo", () => {
+    it("TC-102-1 should return systeminfo", (done) => {
+      chai
+        .request(server)
+        .get("/api/info")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("message").eq("Systeminfo for share-a-meal");
+          res.body.should.have.property("status").eq(200);
+          res.body.should.have.property("data");
+          res.body.data.should.have.property("studentName").eq("Jan Willem Ruijzenaars");
+          res.body.data.should.have.property("studentNumber").eq(2150617);
+          res.body.data.should.have.property("description").eq("A system for students to manage their meals in their student homes");
+          done();
+        });
+    });
+  });
+});
+
 describe("user tests", () => {
 
   beforeEach((done) => {
