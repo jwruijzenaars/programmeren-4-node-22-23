@@ -15,6 +15,7 @@ jobs:
       DB_DATABASE: share_a_meal
       DB_USER: root
       DB_PASSWORD: root
+      NODE_ENV: test
     services:
       mysql:
         image: mysql:5.7
