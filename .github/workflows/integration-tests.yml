@@ -16,6 +16,7 @@ jobs:
       TEST_DB_USER: root
       TEST_DB_PASSWORD: root
       NODE_ENV: test
+      TOKEN_SECRET: 'ThatsASecret'
     services:
       mysql:
         image: mysql:5.7
