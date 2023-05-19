@@ -30,7 +30,7 @@ const authController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        data: err.toString(),
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -72,7 +72,7 @@ const authController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        data: err.toString(),
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -86,14 +86,14 @@ const authController = {
           res.status(500).json({
             status: 500,
             message: "Internal server error",
-            data: err.toString(),
+            data: "",
             datetime: new Date().toISOString(),
           });
         } else if (result.length === 0) {
           res.status(404).json({
             status: 404,
             message: "User not found",
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         } else {
@@ -126,7 +126,7 @@ const authController = {
             res.status(400).json({
               status: 400,
               message: "Wrong password or email combination",
-              data: null,
+              data: "",
               datetime: new Date().toISOString(),
             });
           }
@@ -136,7 +136,7 @@ const authController = {
       res.status(500).json({
         status: 500,
         message: "Internal server error",
-        data: err.toString(),
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -153,14 +153,14 @@ const authController = {
             res.status(403).json({
               status: 403,
               message: "Email is already in use",
-              data: err.toString(),
+              data: "",
               datetime: new Date().toISOString(),
             });
           } else {
             res.status(500).json({
               status: 500,
               message: "Internal server error",
-              data: err.toString(),
+              data: "",
               datetime: new Date().toISOString(),
             });
           }
@@ -170,7 +170,7 @@ const authController = {
               res.status(500).json({
                 status: 500,
                 message: "Internal server error",
-                data: err.toString(),
+                data: "",
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -204,7 +204,7 @@ const authController = {
       res.status(500).json({
         status: 500,
         message: "Internal server error",
-        data: err.toString(),
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -218,7 +218,7 @@ const authController = {
       res.status(401).json({
         status: 401,
         message: "Authorization header missing!",
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     } else {
@@ -230,7 +230,7 @@ const authController = {
           res.status(401).json({
             status: 401,
             message: "Not authorized",
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -251,7 +251,7 @@ const authController = {
       res.status(401).json({
         status: 401,
         message: "Authorization header missing!",
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     } else {
@@ -263,7 +263,7 @@ const authController = {
           res.status(401).json({
             status: 401,
             message: "Not authorized",
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -277,7 +277,7 @@ const authController = {
           res.status(500).json({
             status: 500,
             message: "Internal server error",
-            data: err.toString(),
+            data: "",
             datetime: new Date().toISOString(),
           });
         } else {

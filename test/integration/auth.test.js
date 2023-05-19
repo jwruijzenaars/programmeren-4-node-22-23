@@ -77,11 +77,7 @@ describe("auth test", () => {
             .end((err, res) => {
               res.should.have.status(400);
               res.body.should.have.property("message").eq("Failed validation");
-              res.body.should.have
-                .property("data")
-                .eq(
-                  "AssertionError [ERR_ASSERTION]: emailAdress must be a string."
-                );
+              res.body.should.have.property("data").eq("");
               res.body.should.have.property("status").eq(400);
               done();
             });
@@ -104,7 +100,7 @@ describe("auth test", () => {
                 .property("message")
                 .eq("Wrong password or email combination");
               res.body.should.have.property("status").eq(400);
-              res.body.should.have.property("data").eq(null);
+              res.body.should.have.property("data").eq("");
               done();
             });
         });
@@ -119,7 +115,7 @@ describe("auth test", () => {
           res.should.have.status(404);
           res.body.should.have.property("message").eq("User not found");
           res.body.should.have.property("status").eq(404);
-          res.body.should.have.property("data").eq(null);
+          res.body.should.have.property("data").eq("");
           done();
         });
     });
@@ -130,13 +126,13 @@ describe("auth test", () => {
         .post("/api/user/")
         .send(expectedFullUser)
         .end((err, res) => {
-            const userId = res.body.data.id;
+          const userId = res.body.data.id;
           chai
             .request(server)
             .post("/api/login/")
             .send(expectedUser)
             .end((err, res) => {
-                console.log(res.body);
+              console.log(res.body);
               res.should.have.status(200);
               res.body.should.have.property("message").eq("Login successful");
               res.body.should.have.property("status").eq(200);
@@ -167,7 +163,7 @@ describe("auth test", () => {
               res.body.data.should.have
                 .property("city")
                 .eq(expectedFullUser.city);
-                done();
+              done();
             });
         });
     });

@@ -153,7 +153,7 @@ describe("meal tests", () => {
       done();
     });
   });
-  
+
   afterEach((done) => {
     afterEach((done) => {
       pool.query(queries.CLEAR_DB_PARTICIPATION, (err, res) => {
@@ -198,11 +198,7 @@ describe("meal tests", () => {
               res.body.should.be.a("object");
               res.body.should.have.property("message");
               res.body.message.should.be.eql("Failed validation");
-              res.body.should.have
-                .property("data")
-                .eq(
-                  "AssertionError [ERR_ASSERTION]: isToTakeHome must be a number."
-                );
+              res.body.should.have.property("data").eq("");
               done();
             });
         });
@@ -219,7 +215,7 @@ describe("meal tests", () => {
           res.body.should.have.property("status").eq(401);
           res.body.should.have.property("message");
           res.body.message.should.be.eql("Authorization header missing!");
-          res.body.should.have.property("data").eq(null);
+          res.body.should.have.property("data").eq("");
           done();
         });
     });
@@ -315,11 +311,7 @@ describe("meal tests", () => {
                   res.body.should.have
                     .property("message")
                     .eq("Failed validation");
-                  res.body.should.have
-                    .property("data")
-                    .eq(
-                      "AssertionError [ERR_ASSERTION]: maxAmountOfParticipants must be a number."
-                    );
+                  res.body.should.have.property("data").eq("");
                   done();
                 });
             });
@@ -352,7 +344,7 @@ describe("meal tests", () => {
                   res.body.should.have
                     .property("message")
                     .eq("Authorization header missing!");
-                  res.body.should.have.property("data").eq(null);
+                  res.body.should.have.property("data").eq("");
                   done();
                 });
             });
@@ -393,7 +385,7 @@ describe("meal tests", () => {
                         .eq(
                           "Not authorized to update a meal that isn't yours."
                         );
-                      res.body.should.have.property("data").eq(null);
+                      res.body.should.have.property("data").eq("");
                       done();
                     });
                 });
@@ -420,7 +412,7 @@ describe("meal tests", () => {
               res.body.should.have
                 .property("message")
                 .eq("Not authorized to update a meal that isn't yours.");
-              res.body.should.have.property("data").eq(null);
+              res.body.should.have.property("data").eq("");
               done();
             });
         });
@@ -618,7 +610,7 @@ describe("meal tests", () => {
           res.should.have.status(404);
           res.body.should.have.property("status").eq(404);
           res.body.should.have.property("message").eq("No meal found");
-          res.body.should.have.property("data").eq(null);
+          res.body.should.have.property("data").eq("");
           done();
         });
     });
@@ -720,7 +712,7 @@ describe("meal tests", () => {
                   res.body.should.have
                     .property("message")
                     .eq("Authorization header missing!");
-                  res.body.should.have.property("data").eq(null);
+                  res.body.should.have.property("data").eq("");
                   done();
                 });
             });
@@ -755,7 +747,7 @@ describe("meal tests", () => {
                   res.body.should.have
                     .property("message")
                     .eq(`Not authorized to delete meal with id: ${mealId}`);
-                  res.body.should.have.property("data").eq(null);
+                  res.body.should.have.property("data").eq("");
                   done();
                 });
             });
@@ -777,8 +769,10 @@ describe("meal tests", () => {
             .end((err, res) => {
               res.should.have.status(404);
               res.body.should.have.property("status").eq(404);
-              res.body.should.have.property("message").eq("Couldn't find meal to delete");
-              res.body.should.have.property("data").eq(null);
+              res.body.should.have
+                .property("message")
+                .eq("Couldn't find meal to delete");
+              res.body.should.have.property("data").eq("");
               done();
             });
         });
@@ -809,7 +803,7 @@ describe("meal tests", () => {
                   res.body.should.have
                     .property("message")
                     .eq(`Meal with id ${mealId} deleted`);
-                  res.body.should.have.property("data").eq(null);
+                  res.body.should.have.property("data").eq("");
                   done();
                 });
             });

@@ -69,7 +69,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        data: err.toString(),
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -87,7 +87,7 @@ const mealController = {
             res.status(400).json({
               status: 400,
               message: "Failed to create meal",
-              data: null,
+              data: "",
               datetime: new Date().toISOString(),
             });
           } else {
@@ -97,7 +97,7 @@ const mealController = {
                   res.status(400).json({
                     status: 400,
                     message: "Failed to create meal",
-                    data: null,
+                    data: "",
                     datetime: new Date().toISOString(),
                   });
                 } else {
@@ -112,7 +112,7 @@ const mealController = {
                 res.status(400).json({
                   status: 400,
                   message: "Failed to create meal",
-                  data: null,
+                  data: "",
                   datetime: new Date().toISOString(),
                 });
               }
@@ -122,7 +122,7 @@ const mealController = {
           res.status(400).json({
             status: 400,
             message: "Failed to create meal",
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -131,7 +131,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Failed to create meal",
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -146,7 +146,7 @@ const mealController = {
             res.status(404).json({
               status: 404,
               message: "No meals found",
-              data: null,
+              data: "",
               datetime: new Date().toISOString(),
             });
           } else {
@@ -163,7 +163,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Couldn't get meals",
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -178,7 +178,7 @@ const mealController = {
             res.status(404).json({
               status: 404,
               message: "No meal found",
-              data: null,
+              data: "",
               datetime: new Date().toISOString(),
             });
           } else {
@@ -193,7 +193,7 @@ const mealController = {
           res.status(400).json({
             status: 400,
             message: "Couldn't get meal with id: " + req.params.mealId,
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -202,7 +202,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Couldn't get meal with id: " + req.params.mealId,
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -222,7 +222,7 @@ const mealController = {
               res.status(404).json({
                 status: 404,
                 message: "Couldn't find meal to update",
-                data: null,
+                data: "",
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -232,7 +232,7 @@ const mealController = {
                     res.status(404).json({
                       status: 404,
                       message: "Couldn't find meal to update",
-                      data: null,
+                      data: "",
                       datetime: new Date().toISOString(),
                     });
                   } else {
@@ -248,7 +248,7 @@ const mealController = {
                     status: 400,
                     message:
                       "Couldn't update meal with id: " + req.params.mealId,
-                      data: null,
+                      data: "",
                     datetime: new Date().toISOString(),
                   });
                 }
@@ -258,7 +258,7 @@ const mealController = {
             res.status(400).json({
               status: 400,
               message: "Couldn't update meal with id: " + req.params.mealId,
-              data: null,
+              data: "",
               datetime: new Date().toISOString(),
             });
           }
@@ -267,7 +267,7 @@ const mealController = {
         res.status(403).json({
           status: 403,
           message: "Not authorized to update a meal that isn't yours.",
-          data: null,
+          data: "",
           datetime: new Date().toISOString(),
         });
       }
@@ -275,7 +275,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Couldn't update meal with id: " + req.params.mealId,
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
@@ -291,7 +291,7 @@ const mealController = {
           res.status(404).json({
             status: 404,
             message: "Couldn't find meal to delete",
-            data: null,
+            data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -303,14 +303,14 @@ const mealController = {
               res.status(400).json({
                 status: 400,
                 message: "Couldn't delete meal with id: " + paramsMealId,
-                data: null,
+                data: "",
                 datetime: new Date().toISOString(),
               });
             } else {
               res.status(200).json({
                 status: 200,
                 message: `Meal with id ${oldMeal.id} deleted`,
-                data: null,
+                data: "",
                 datetime: new Date().toISOString(),
               });
             }
@@ -320,7 +320,7 @@ const mealController = {
             status: 403,
             message:
               "Not authorized to delete meal with id: " + req.params.mealId,
-              data: null,
+              data: "",
             datetime: new Date().toISOString(),
           });
         }
@@ -328,7 +328,7 @@ const mealController = {
         res.status(400).json({
           status: 400,
           message: "Couldn't delete meal with id: " + paramsMealId,
-          data: null,
+          data: "",
           datetime: new Date().toISOString(),
         });
       }});
@@ -336,7 +336,7 @@ const mealController = {
       res.status(400).json({
         status: 400,
         message: "Couldn't delete meal with id: " + paramsMealId,
-        data: null,
+        data: "",
         datetime: new Date().toISOString(),
       });
     }
