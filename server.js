@@ -51,6 +51,11 @@ app.get("/api/info", (req, res) => {
   res.send(systemInfo).status(200);
 });
 
+app.get("/", (req, res) => {
+  logger.debug("/ called, getting system info");
+  res.send(systemInfo).status(200);
+});
+
 app.get("*", (req, res) => {
   logger.warn(`Incorrect route: ${req.url}`);
   res.status(400).send({

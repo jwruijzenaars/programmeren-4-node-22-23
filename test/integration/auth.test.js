@@ -14,6 +14,8 @@ logger.trace("Connected to database: " + dbTestConfig.database);
 chai.should();
 chai.use(chaiHttp);
 
+const emptyData = {};
+
 const expectedFullUser = {
   id: 1,
   firstName: "Jan Willem",
@@ -76,7 +78,7 @@ describe("auth test", () => {
               res.should.have.status(400);
               res.body.should.have.property("message").eq("Failed validation");
               res.body.should.have
-                .property("error")
+                .property("data")
                 .eq(
                   "AssertionError [ERR_ASSERTION]: emailAdress must be a string."
                 );
@@ -102,7 +104,7 @@ describe("auth test", () => {
                 .property("message")
                 .eq("Wrong password or email combination");
               res.body.should.have.property("status").eq(400);
-              res.body.should.not.have.property("data");
+              res.body.should.have.property("data").eq(null);
               done();
             });
         });
@@ -117,7 +119,7 @@ describe("auth test", () => {
           res.should.have.status(404);
           res.body.should.have.property("message").eq("User not found");
           res.body.should.have.property("status").eq(404);
-          res.body.should.not.have.property("data");
+          res.body.should.have.property("data").eq(null);
           done();
         });
     });

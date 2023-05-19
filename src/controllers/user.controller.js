@@ -50,7 +50,7 @@ const userController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        error: err.toString(),
+        data: err.toString(),
         datetime: new Date().toISOString(),
       });
     }
@@ -159,6 +159,7 @@ const userController = {
               res.status(404).send({
                 status: 404,
                 message: `No users found`,
+                data: null,
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -173,6 +174,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get users`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -184,6 +186,7 @@ const userController = {
               res.status(404).send({
                 status: 404,
                 message: `No users found`,
+                data: null,
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -198,6 +201,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get users`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -209,6 +213,7 @@ const userController = {
               res.status(404).send({
                 status: 404,
                 message: `No users found`,
+                data: null,
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -223,6 +228,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get users`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -234,6 +240,7 @@ const userController = {
               res.status(404).send({
                 status: 404,
                 message: `No users found`,
+                data: null,
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -248,6 +255,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get users`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -257,6 +265,7 @@ const userController = {
       res.status(400).send({
         status: 400,
         message: `Couldn't get users`,
+        data: null,
         datetime: new Date().toISOString(),
       });
     }
@@ -273,6 +282,7 @@ const userController = {
             res.status(404).send({
               status: 404,
               message: `User with Id ${req.params.userId} not found`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           } else if (result) {
@@ -285,6 +295,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get user with Id ${req.params.userId}`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -294,6 +305,7 @@ const userController = {
       res.status(400).send({
         status: 400,
         message: `Couldn't get user with Id ${req.params.userId}`,
+        data: null,
         datetime: new Date().toISOString(),
       });
     }
@@ -308,6 +320,7 @@ const userController = {
             res.status(404).send({
               status: 404,
               message: `User with Id ${req.params.userId} not found`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           } else if (result) {
@@ -320,6 +333,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't get user with Id ${req.userId}`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -328,6 +342,7 @@ const userController = {
         res.status(401).send({
           status: 401,
           message: "Not authorized, you may need to login again",
+          data: null,
           datetime: new Date().toISOString(),
         });
       }
@@ -335,6 +350,7 @@ const userController = {
       res.status(400).send({
         status: 400,
         message: `Couldn't get user with Id ${req.params.userId}`,
+        data: null,
         datetime: new Date().toISOString(),
       });
     }
@@ -362,6 +378,7 @@ const userController = {
             res.status(404).send({
               status: 404,
               message: `User with Id ${userIdToken} not found`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           } else if (result) {
@@ -370,7 +387,7 @@ const userController = {
                 res.status(500).json({
                   status: 500,
                   message: "Internal server error",
-                  error: err.toString(),
+                  data: err.toString(),
                   datetime: new Date().toISOString(),
                 });
               } else {
@@ -397,6 +414,7 @@ const userController = {
             res.status(400).send({
               status: 400,
               message: `Couldn't update user with Id ${req.params.userId}`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -405,6 +423,7 @@ const userController = {
         res.status(403).send({
           status: 403,
           message: "Not authorized to update another user",
+          data: null,
           datetime: new Date().toISOString(),
         });
       }
@@ -412,6 +431,7 @@ const userController = {
       res.status(400).send({
         status: 400,
         message: `Couldn't update user with Id ${req.params.userId}`,
+        data: null,
         datetime: new Date().toISOString(),
       });
     }
@@ -426,12 +446,14 @@ const userController = {
             res.status(404).send({
               status: 404,
               message: `Couldn't find user with Id ${req.params.userId} to delete`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           } else {
             res.status(200).send({
               status: 200,
               message: `User with Id ${req.params.userId} is deleted`,
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -440,6 +462,7 @@ const userController = {
         res.status(401).send({
           status: 401,
           message: "Not authorized to delete another user",
+          data: null,
           datetime: new Date().toISOString(),
         });
       }
@@ -447,6 +470,7 @@ const userController = {
       res.status(400).send({
         status: 400,
         message: `Couldn't delete user with Id ${req.params.userId}`,
+        data: null,
         datetime: new Date().toISOString(),
       });
     }

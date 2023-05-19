@@ -30,7 +30,7 @@ const authController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        error: err.toString(),
+        data: err.toString(),
         datetime: new Date().toISOString(),
       });
     }
@@ -46,11 +46,6 @@ const authController = {
         typeof req.body.lastName === "string",
         "lastName must be a string."
       );
-      assert(
-        typeof req.body.isActive === "number",
-        "isActive must be a number."
-      );
-
       assert(emailRegEx.test(req.body.emailAdress), "email is invalid.");
       assert(
         typeof req.body.emailAdress === "string",
@@ -77,7 +72,7 @@ const authController = {
       res.status(400).json({
         status: 400,
         message: "Failed validation",
-        error: err.toString(),
+        data: err.toString(),
         datetime: new Date().toISOString(),
       });
     }
@@ -91,13 +86,14 @@ const authController = {
           res.status(500).json({
             status: 500,
             message: "Internal server error",
-            error: err.toString(),
+            data: err.toString(),
             datetime: new Date().toISOString(),
           });
         } else if (result.length === 0) {
           res.status(404).json({
             status: 404,
             message: "User not found",
+            data: null,
             datetime: new Date().toISOString(),
           });
         } else {
@@ -130,6 +126,7 @@ const authController = {
             res.status(400).json({
               status: 400,
               message: "Wrong password or email combination",
+              data: null,
               datetime: new Date().toISOString(),
             });
           }
@@ -139,7 +136,7 @@ const authController = {
       res.status(500).json({
         status: 500,
         message: "Internal server error",
-        error: err.toString(),
+        data: err.toString(),
         datetime: new Date().toISOString(),
       });
     }
@@ -147,19 +144,23 @@ const authController = {
   async register(req, res, next) {
     logger.trace("authController register called");
     try {
+      if(req.body.isActive === undefined) {
+        req.body.isActive = 0;
+      }
       await authDao.register(req.body, (err, result) => {
         if (err) {
           if (err.includes("ER_DUP_ENTRY") || err.includes("Duplicate entry")) {
             res.status(403).json({
               status: 403,
               message: "Email is already in use",
+              data: err.toString(),
               datetime: new Date().toISOString(),
             });
           } else {
             res.status(500).json({
               status: 500,
               message: "Internal server error",
-              error: err.toString(),
+              data: err.toString(),
               datetime: new Date().toISOString(),
             });
           }
@@ -169,7 +170,7 @@ const authController = {
               res.status(500).json({
                 status: 500,
                 message: "Internal server error",
-                error: err.toString(),
+                data: err.toString(),
                 datetime: new Date().toISOString(),
               });
             } else {
@@ -184,7 +185,7 @@ const authController = {
                 emailAdress: user.emailadress,
                 phoneNumber: user.phonenumber,
                 roles: user.roles,
-                isActive: user.isactive,
+                isActive: user.isactive || 1,
                 street: user.street,
                 city: user.city,
                 token: jwt.sign(payload, jwtSecretKey, { expiresIn: "2h" }),
@@ -203,7 +204,7 @@ const authController = {
       res.status(500).json({
         status: 500,
         message: "Internal server error",
-        error: err.toString(),
+        data: err.toString(),
         datetime: new Date().toISOString(),
       });
     }
@@ -217,6 +218,7 @@ const authController = {
       res.status(401).json({
         status: 401,
         message: "Authorization header missing!",
+        data: null,
         datetime: new Date().toISOString(),
       });
     } else {
@@ -228,6 +230,7 @@ const authController = {
           res.status(401).json({
             status: 401,
             message: "Not authorized",
+            data: null,
             datetime: new Date().toISOString(),
           });
         }
@@ -248,6 +251,7 @@ const authController = {
       res.status(401).json({
         status: 401,
         message: "Authorization header missing!",
+        data: null,
         datetime: new Date().toISOString(),
       });
     } else {
@@ -259,6 +263,7 @@ const authController = {
           res.status(401).json({
             status: 401,
             message: "Not authorized",
+            data: null,
             datetime: new Date().toISOString(),
           });
         }
@@ -272,7 +277,7 @@ const authController = {
           res.status(500).json({
             status: 500,
             message: "Internal server error",
-            error: err.toString(),
+            data: err.toString(),
             datetime: new Date().toISOString(),
           });
         } else {
@@ -295,7 +300,7 @@ const authController = {
           res.status(200).json({
             status: 200,
             message: "Token renewed",
-            user: userInfo,
+            data: userInfo,
             datetime: new Date().toISOString(),
           });
         }

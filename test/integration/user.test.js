@@ -158,7 +158,7 @@ describe("user tests", () => {
           .end((err, res) => {
             res.should.have.status(400);
             res.body.should.have
-              .property("error")
+              .property("data")
               .eq(
                 "AssertionError [ERR_ASSERTION]: phoneNumber must be a string."
               );
@@ -176,7 +176,7 @@ describe("user tests", () => {
             res.should.have.status(400);
             res.body.should.have.property("message").eq("Failed validation");
             res.body.should.have
-              .property("error")
+              .property("data")
               .eq("AssertionError [ERR_ASSERTION]: email is invalid.");
             res.body.should.have.property("status").eq(400);
             done();
@@ -192,7 +192,7 @@ describe("user tests", () => {
             res.should.have.status(400);
             res.body.should.have.property("message").eq("Failed validation");
             res.body.should.have
-              .property("error")
+              .property("data")
               .eq(
                 "AssertionError [ERR_ASSERTION]: password is invalid, must be at least 4 characters long."
               );
@@ -238,6 +238,7 @@ describe("user tests", () => {
                 .property("message")
                 .eq("Email is already in use");
               res.body.should.have.property("status").eq(403);
+              res.body.should.have.property("data").eq("Duplicate entry 'jw.ruijzenaars@student.avans.nl' for key 'user.IDX_87877a938268391a71723b303c'");
               done();
             });
         });
@@ -356,6 +357,9 @@ describe("user tests", () => {
                       .property("message")
                       .eq("Got all users");
                     res.body.should.have.property("status").eq(200);
+                    res.body.should.have.property("data");
+                    res.body.data.should.be.a("array");
+                    res.body.data.length.should.be.eq(2);
                     done();
                   });
               });
@@ -410,6 +414,7 @@ describe("user tests", () => {
             res.should.have.status(404);
             res.body.should.have.property("message").eq("No users found");
             res.body.should.have.property("status").eq(404);
+            res.body.should.have.property("data").eq(null);
             done();
           });
       });
@@ -431,6 +436,7 @@ describe("user tests", () => {
                 res.should.have.status(401);
                 res.body.should.have.property("message").eq(`Not authorized`);
                 res.body.should.have.property("status").eq(401);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -497,6 +503,7 @@ describe("user tests", () => {
                 res.should.have.status(401);
                 res.body.should.have.property("message").eq(`Not authorized`);
                 res.body.should.have.property("status").eq(401);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -521,6 +528,7 @@ describe("user tests", () => {
                   .property("message")
                   .eq(`User with Id 0 not found`);
                 res.body.should.have.property("status").eq(404);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -594,7 +602,7 @@ describe("user tests", () => {
                   .eq(`Failed validation`);
                 res.body.should.have.property("status").eq(400);
                 res.body.should.have
-                  .property("error")
+                  .property("data")
                   .eq("AssertionError [ERR_ASSERTION]: email is invalid.");
                 done();
               });
@@ -619,6 +627,7 @@ describe("user tests", () => {
                 res.should.have.status(401);
                 res.body.should.have.property("message").eq(`Not authorized`);
                 res.body.should.have.property("status").eq(401);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -646,7 +655,7 @@ describe("user tests", () => {
                   .eq(`Failed validation`);
                 res.body.should.have.property("status").eq(400);
                 res.body.should.have
-                  .property("error")
+                  .property("data")
                   .eq(
                     "AssertionError [ERR_ASSERTION]: phoneNumber is invalid."
                   );
@@ -676,6 +685,7 @@ describe("user tests", () => {
                   .property("message")
                   .eq(`Not authorized to update another user`);
                 res.body.should.have.property("status").eq(403);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -701,6 +711,7 @@ describe("user tests", () => {
                   .property("message")
                   .eq(`Authorization header missing!`);
                 res.body.should.have.property("status").eq(401);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -772,6 +783,7 @@ describe("user tests", () => {
               .property("message")
               .eq(`Couldn't find user with Id ${userId} to delete`);
             res.body.should.have.property("status").eq(404);
+            res.body.should.have.property("data").eq(null);
             done();
           });
       });
@@ -786,6 +798,7 @@ describe("user tests", () => {
               .property("message")
               .eq(`Authorization header missing!`);
             res.body.should.have.property("status").eq(401);
+            res.body.should.have.property("data").eq(null);
             done();
           });
       });
@@ -810,6 +823,7 @@ describe("user tests", () => {
                   .property("message")
                   .eq(`Not authorized to delete another user`);
                 res.body.should.have.property("status").eq(401);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
@@ -835,6 +849,7 @@ describe("user tests", () => {
                   .property("message")
                   .eq(`User with Id ${userId} is deleted`);
                 res.body.should.have.property("status").eq(200);
+                res.body.should.have.property("data").eq(null);
                 done();
               });
           });
