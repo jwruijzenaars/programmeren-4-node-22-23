@@ -11,7 +11,7 @@ router.put('/:mealId', authController.validateToken, mealController.validateMeal
 router.delete('/:mealId', authController.validateToken, mealController.delete);
 
 router.post('/:mealId/participate', authController.validateToken, participationController.validateParticipation, participationController.createParticipation);
-router.put('/:mealId/participate', authController.validateToken, participationController.deleteParticipation);
+router.delete('/:mealId/participate', authController.validateToken, participationController.deleteParticipation);
 router.get('/:mealId/participate', authController.validateToken, participationController.getParticipants);
 router.get('/:mealId/participate/:userId', authController.validateToken, participationController.getParticipant);
 
