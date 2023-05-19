@@ -8,11 +8,9 @@ const participationDao = {
     logger.trace("participationDao create called");
     db.query(queries.PARTICIPATION_CREATE, [mealId, userId], (err, res) => {
       if (err) {
-        logger.error("Create: ", err);
         result(err, null);
         return;
       }
-      logger.info("Created participation: ", res);
       result(null, res);
       return;
     });
@@ -22,11 +20,9 @@ const participationDao = {
     logger.trace("participationDao getAll called");
     db.query(queries.PARTICIPATION_SELECT_ALL, [mealId], (err, res) => {
       if (err) {
-        logger.error("getAll: ", err);
         result(err, null);
         return;
       }
-      logger.info("Participants: ", res);
       result(null, res);
     });
   },
@@ -35,27 +31,23 @@ const participationDao = {
     logger.trace("participationDao getOne called");
     db.query(queries.PARTICIPATION_SELECT_ONE, [mealId, userId], (err, res) => {
       if (err) {
-        logger.error("getOne: ", err);
         result(err, null);
         return;
       }
-      if (res.length) {
-        logger.info("Found participation: ", res[0]);
-        result(null, res[0]);
+      if (res) {
+        result(null, res);
         return;
       }
     });
   },
 
-  async removeParticipation(mealId, userId, result) {
+  async deleteParticipation(mealId, userId, result) {
     logger.trace("participationDao delete called");
     db.query(queries.PARTICIPATION_DELETE, [mealId, userId], (err, res) => {
       if (err) {
-        logger.error("Delete: ", err);
         result(err, null);
         return;
       }
-      logger.info("Deleted participation with id: ", id);
       result(null, res);
     });
   },

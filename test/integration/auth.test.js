@@ -132,7 +132,6 @@ describe("auth test", () => {
             .post("/api/login/")
             .send(expectedUser)
             .end((err, res) => {
-              console.log(res.body);
               res.should.have.status(200);
               res.body.should.have.property("message").eq("Login successful");
               res.body.should.have.property("status").eq(200);

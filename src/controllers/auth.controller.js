@@ -98,7 +98,6 @@ const authController = {
           });
         } else {
           const user = result[0];
-          console.log(user);
           if (user.password === req.body.password) {
             const payload = {
               id: user.id,
