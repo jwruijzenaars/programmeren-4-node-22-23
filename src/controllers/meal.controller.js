@@ -270,7 +270,6 @@ const mealController = {
     try {
       var oldMeal;
       const paramsMealId = req.params.mealId;
-      console.log("req.params.mealId: " + req.params.mealId);
       await mealDao.getOne(paramsMealId, (err, result) => {
         if (result.length === 0) {
           res.status(404).json({
@@ -280,13 +279,10 @@ const mealController = {
           });
         }
         else if (result) {
-          console.log("result: " + result);
           oldMeal = result[0];
         if (Number(oldMeal.cookId) === Number(req.userId)) {
-          console.log("param mealId: " + req.params.mealId);
           mealDao.delete(paramsMealId, (err, result) => {
             if (err) {
-              console.log("err: " + err);
               res.status(400).json({
                 status: 400,
                 message: "Couldn't delete meal with id: " + paramsMealId,
@@ -316,7 +312,6 @@ const mealController = {
         });
       }});
     } catch (err) {
-      console.log("err: " + err);
       res.status(400).json({
         status: 400,
         message: "Couldn't delete meal with id: " + paramsMealId,

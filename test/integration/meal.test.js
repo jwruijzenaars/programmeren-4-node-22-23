@@ -463,7 +463,6 @@ describe("meal tests", () => {
                 .send(updatedMeal)
                 .auth(token, { type: "bearer" })
                 .end((err, res) => {
-                  logger.debug(res.body);
                   res.should.have.status(200);
                   res.body.should.be.a("object");
                   res.body.should.have.property("status").eq(200);
