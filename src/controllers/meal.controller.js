@@ -177,7 +177,7 @@ const mealController = {
             res.status(200).json({
               status: 200,
               message: "Meal retrieved",
-              data: result.rows[0],
+              data: result[0],
               datetime: new Date().toISOString(),
             });
           }
@@ -234,7 +234,8 @@ const mealController = {
                 } else {
                   res.status(400).json({
                     status: 400,
-                    message: "Couldn't update meal with id: " + req.params.mealId,
+                    message:
+                      "Couldn't update meal with id: " + req.params.mealId,
                     datetime: new Date().toISOString(),
                   });
                 }
@@ -251,8 +252,7 @@ const mealController = {
       } else {
         res.status(403).json({
           status: 403,
-          message:
-            "Not authorized to update a meal that isn't yours.",
+          message: "Not authorized to update a meal that isn't yours.",
           datetime: new Date().toISOString(),
         });
       }
@@ -269,45 +269,57 @@ const mealController = {
     logger.trace("mealController delete called");
     try {
       var oldMeal;
-      await mealDao.getOne(req.params.mealId, (err, result) => {
-        if (result) {
-          oldMeal = result.rows[0];
-        } else {
+      const paramsMealId = req.params.mealId;
+      console.log("req.params.mealId: " + req.params.mealId);
+      await mealDao.getOne(paramsMealId, (err, result) => {
+        if (result.length === 0) {
           res.status(404).json({
             status: 404,
             message: "Couldn't find meal to delete",
             datetime: new Date().toISOString(),
           });
         }
-      });
-      if (oldMeal.cookId === req.userId) {
-        await mealDao.delete(req.params.mealId, (err, result) => {
-          if (err) {
-            res.status(400).json({
-              status: 400,
-              message: "Couldn't delete meal with id: " + req.params.mealId,
-              datetime: new Date().toISOString(),
-            });
-          } else {
-            res.status(200).json({
-              status: 200,
-              message: `Meal with id ${oldMeal.id} deleted`,
-              datetime: new Date().toISOString(),
-            });
-          }
-        });
+        else if (result) {
+          console.log("result: " + result);
+          oldMeal = result[0];
+        if (Number(oldMeal.cookId) === Number(req.userId)) {
+          console.log("param mealId: " + req.params.mealId);
+          mealDao.delete(paramsMealId, (err, result) => {
+            if (err) {
+              console.log("err: " + err);
+              res.status(400).json({
+                status: 400,
+                message: "Couldn't delete meal with id: " + paramsMealId,
+                datetime: new Date().toISOString(),
+              });
+            } else {
+              res.status(200).json({
+                status: 200,
+                message: `Meal with id ${oldMeal.id} deleted`,
+                datetime: new Date().toISOString(),
+              });
+            }
+          });
+        } else {
+          res.status(403).json({
+            status: 403,
+            message:
+              "Not authorized to delete meal with id: " + req.params.mealId,
+            datetime: new Date().toISOString(),
+          });
+        }
       } else {
-        res.status(403).json({
-          status: 403,
-          message:
-            "Not authorized to delete meal with id: " + req.params.mealId,
+        res.status(400).json({
+          status: 400,
+          message: "Couldn't delete meal with id: " + paramsMealId,
           datetime: new Date().toISOString(),
         });
-      }
+      }});
     } catch (err) {
+      console.log("err: " + err);
       res.status(400).json({
         status: 400,
-        message: "Couldn't delete meal with id: " + req.params.mealId,
+        message: "Couldn't delete meal with id: " + paramsMealId,
         datetime: new Date().toISOString(),
       });
     }

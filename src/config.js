@@ -29,7 +29,7 @@ module.exports = {
         maxIdle: 10,
     },
 
-    jwtSecretKey: process.env.SECRET,
+    jwtSecretKey: process.env.TOKEN_SECRET,
     logger: require("tracer").console({
         format: ["{{timestamp}} [{{title}}] {{file}}:{{line}} : {{message}}"],
         preprocess: function(data) {

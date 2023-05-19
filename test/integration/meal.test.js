@@ -7,6 +7,7 @@ const logger = require("../../src/config").logger;
 const jwt = require("jsonwebtoken");
 const dbTestConfig = require("../../src/config").dbTestConfig;
 const mysql = require("mysql2");
+const { jwtSecretKey } = require("../../src/config");
 const pool = mysql.createPool(dbTestConfig);
 logger.trace("Connected to database: " + dbTestConfig.database);
 
@@ -94,8 +95,6 @@ const expectedMeal = {
   allergenes: "gluten",
 };
 
-
-
 const missingFieldMeal = {
   id: 1,
   isActive: 1,
@@ -154,6 +153,7 @@ describe("meal tests", () => {
       done();
     });
   });
+  
   afterEach((done) => {
     afterEach((done) => {
       pool.query(queries.CLEAR_DB_PARTICIPATION, (err, res) => {
@@ -179,6 +179,7 @@ describe("meal tests", () => {
       done();
     });
   });
+
   describe("TC-301 create meal", () => {
     it("TC-301-1 shouldn't create a meal, missing field isToTakeHome", (done) => {
       chai
@@ -260,9 +261,7 @@ describe("meal tests", () => {
               res.body.data.should.have
                 .property("maxAmountOfParticipants")
                 .eq(expectedMeal.maxAmountOfParticipants);
-              res.body.data.should.have
-                .property("price")
-                .eq('10.00');
+              res.body.data.should.have.property("price").eq("10.00");
               res.body.data.should.have
                 .property("imageUrl")
                 .eq(expectedMeal.imageUrl);
@@ -287,6 +286,7 @@ describe("meal tests", () => {
         });
     });
   });
+
   describe("TC-302 update meal", () => {
     it("TC-302-1 shouldn't update a meal, missing fields name, price and maxAmountOfParticipants", (done) => {
       chai
@@ -463,7 +463,7 @@ describe("meal tests", () => {
                 .send(updatedMeal)
                 .auth(token, { type: "bearer" })
                 .end((err, res) => {
-                  logger.debug(res.body)
+                  logger.debug(res.body);
                   res.should.have.status(200);
                   res.body.should.be.a("object");
                   res.body.should.have.property("status").eq(200);
@@ -473,9 +473,7 @@ describe("meal tests", () => {
                   res.body.data.should.have
                     .property("name")
                     .eq(updatedMeal.name);
-                  res.body.data.should.have
-                    .property("price")
-                    .eq('15.00');
+                  res.body.data.should.have.property("price").eq("15.00");
                   res.body.data.should.have
                     .property("maxAmountOfParticipants")
                     .eq(updatedMeal.maxAmountOfParticipants);
@@ -497,24 +495,26 @@ describe("meal tests", () => {
                   res.body.data.should.have
                     .property("isToTakeHome")
                     .eq(updatedMeal.isToTakeHome);
-                  res.body.data.should.have
-                    .property("cookId")
-                    .eq(userId);
-                  res.body.data.should.have
-                    .property("createDate");
-                  Date(res.body.data.createDate).should.be.eql(Date(updatedMeal.createDate));
-                  res.body.data.should.have
-                    .property("updateDate");
-                  Date(res.body.data.updateDate).should.be.eql(Date(updatedMeal.updateDate));
-                  res.body.data.should.have
-                    .property("dateTime");
-                  Date(res.body.data.dateTime).should.be.eql(Date(updatedMeal.dateTime));
+                  res.body.data.should.have.property("cookId").eq(userId);
+                  res.body.data.should.have.property("createDate");
+                  Date(res.body.data.createDate).should.be.eql(
+                    Date(updatedMeal.createDate)
+                  );
+                  res.body.data.should.have.property("updateDate");
+                  Date(res.body.data.updateDate).should.be.eql(
+                    Date(updatedMeal.updateDate)
+                  );
+                  res.body.data.should.have.property("dateTime");
+                  Date(res.body.data.dateTime).should.be.eql(
+                    Date(updatedMeal.dateTime)
+                  );
                   done();
                 });
             });
         });
     });
   });
+
   describe("TC-303 get all meals", () => {
     it("TC-303-1 should return all meals", (done) => {
       chai
@@ -607,6 +607,213 @@ describe("meal tests", () => {
             });
         });
     });
-    
+  });
+
+  describe("TC-304 get meal by id", () => {
+    it("TC-304-1 shouldn't return meal by id, meal doesn't exist", (done) => {
+      chai
+        .request(server)
+        .get("/api/meal/" + 0)
+        .end((err, res) => {
+          res.should.have.status(404);
+          res.body.should.have.property("status").eq(404);
+          res.body.should.have.property("message").eq("No meal found");
+          res.body.should.not.have.property("data");
+          done();
+        });
+    });
+
+    it("TC-304-2 should return meal by id", (done) => {
+      chai
+        .request(server)
+        .post("/api/user")
+        .send(expectedUser)
+        .end((err, res) => {
+          const userId = res.body.data.id;
+          const token = res.body.data.token;
+          chai
+            .request(server)
+            .post("/api/meal/")
+            .send(expectedMeal)
+            .auth(token, { type: "bearer" })
+            .end((err, res) => {
+              const mealId = res.body.data.id;
+              chai
+                .request(server)
+                .get("/api/meal/" + mealId)
+                .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.have.property("status").eq(200);
+                  res.body.should.have.property("message").eq("Meal retrieved");
+                  res.body.should.have.property("data");
+                  res.body.data.should.have.property("id").eq(mealId);
+                  res.body.data.should.have
+                    .property("name")
+                    .eq(expectedMeal.name);
+                  res.body.data.should.have
+                    .property("description")
+                    .eq(expectedMeal.description);
+                  res.body.data.should.have
+                    .property("allergenes")
+                    .eq(expectedMeal.allergenes);
+                  res.body.data.should.have
+                    .property("isActive")
+                    .eq(expectedMeal.isActive);
+                  res.body.data.should.have
+                    .property("isVega")
+                    .eq(expectedMeal.isVega);
+                  res.body.data.should.have
+                    .property("isVegan")
+                    .eq(expectedMeal.isVegan);
+                  res.body.data.should.have
+                    .property("isToTakeHome")
+                    .eq(expectedMeal.isToTakeHome);
+                  res.body.data.should.have.property("dateTime");
+                  Date(res.body.data.dateTime).should.be.eql(
+                    Date(expectedMeal.dateTime)
+                  );
+                  res.body.data.should.have
+                    .property("maxAmountOfParticipants")
+                    .eq(expectedMeal.maxAmountOfParticipants);
+                  res.body.data.should.have.property("price").eq("10.00");
+                  res.body.data.should.have
+                    .property("imageUrl")
+                    .eq(expectedMeal.imageUrl);
+                  res.body.data.should.have.property("cookId").eq(userId);
+                  res.body.data.should.have.property("createDate");
+                  Date(res.body.data.createDate).should.be.eql(
+                    Date(expectedMeal.createDate)
+                  );
+                  res.body.data.should.have.property("updateDate");
+                  Date(res.body.data.updateDate).should.be.eql(
+                    Date(expectedMeal.updateDate)
+                  );
+                  done();
+                });
+            });
+        });
+    });
+  });
+
+  describe("TC-305 delete meal", () => {
+    it("TC-305-1 shouldn't delete meal, not logged in", (done) => {
+      chai
+        .request(server)
+        .post("/api/user/")
+        .send(expectedUser)
+        .end((err, res) => {
+          const userId = res.body.data.id;
+          const token = res.body.data.token;
+          chai
+            .request(server)
+            .post("/api/meal/")
+            .send(expectedMeal)
+            .auth(token, { type: "bearer" })
+            .end((err, res) => {
+              const mealId = res.body.data.id;
+              chai
+                .request(server)
+                .delete("/api/meal/" + mealId)
+                .end((err, res) => {
+                  res.should.have.status(401);
+                  res.body.should.have.property("status").eq(401);
+                  res.body.should.have
+                    .property("message")
+                    .eq("Authorization header missing!");
+                  res.body.should.not.have.property("data");
+                  done();
+                });
+            });
+        });
+    });
+
+    it("TC-305-2 shouldn't delete meal, not authorized", (done) => {
+      chai
+        .request(server)
+        .post("/api/user/")
+        .send(expectedUser)
+        .end((err, res) => {
+          const userId = res.body.data.id;
+          const token = res.body.data.token;
+          chai
+            .request(server)
+            .post("/api/meal/")
+            .send(expectedMeal)
+            .auth(token, { type: "bearer" })
+            .end((err, res) => {
+              const mealId = res.body.data.id;
+              const invalidToken = jwt.sign({ id: 1 }, jwtSecretKey, {
+                expiresIn: "5m",
+              });
+              chai
+                .request(server)
+                .delete("/api/meal/" + mealId)
+                .auth(invalidToken, { type: "bearer" })
+                .end((err, res) => {
+                  res.should.have.status(403);
+                  res.body.should.have.property("status").eq(403);
+                  res.body.should.have
+                    .property("message")
+                    .eq(`Not authorized to delete meal with id: ${mealId}`);
+                  res.body.should.not.have.property("data");
+                  done();
+                });
+            });
+        });
+    });
+
+    it("TC-305-3 shouldn't delete meal, meal doesn't exist", (done) => {
+      chai
+        .request(server)
+        .post("/api/user/")
+        .send(expectedUser)
+        .end((err, res) => {
+          const userId = res.body.data.id;
+          const token = res.body.data.token;
+          chai
+            .request(server)
+            .delete("/api/meal/1")
+            .auth(token, { type: "bearer" })
+            .end((err, res) => {
+              res.should.have.status(404);
+              res.body.should.have.property("status").eq(404);
+              res.body.should.have.property("message").eq("Couldn't find meal to delete");
+              res.body.should.not.have.property("data");
+              done();
+            });
+        });
+    });
+
+    it("TC-305-4 should delete meal", (done) => {
+      chai
+        .request(server)
+        .post("/api/user")
+        .send(expectedUser)
+        .end((err, res) => {
+          const userId = res.body.data.id;
+          const token = res.body.data.token;
+          chai
+            .request(server)
+            .post("/api/meal/")
+            .send(expectedMeal)
+            .auth(token, { type: "bearer" })
+            .end((err, res) => {
+              const mealId = res.body.data.id;
+              chai
+                .request(server)
+                .delete("/api/meal/" + mealId)
+                .auth(token, { type: "bearer" })
+                .end((err, res) => {
+                  res.should.have.status(200);
+                  res.body.should.have.property("status").eq(200);
+                  res.body.should.have
+                    .property("message")
+                    .eq(`Meal with id ${mealId} deleted`);
+                  res.body.should.not.have.property("data");
+                  done();
+                });
+            });
+        });
+    });
   });
 });
