@@ -17,9 +17,13 @@ const authController = {
         typeof req.body.emailAdress === "string",
         "emailAdress must be a string."
       );
+      assert(emailRegEx.test(req.body.emailAdress), "email is invalid.");
       assert(
         typeof req.body.password === "string",
         "password must be a string."
+      );
+      assert(
+        passwordRegEx.test(req.body.password), "password is invalid, must be at least 4 characters long."
       );
       next();
     } catch (err) {
@@ -90,15 +94,15 @@ const authController = {
             error: err.toString(),
             datetime: new Date().toISOString(),
           });
-        } else if (result.rows.length === 0) {
+        } else if (result.length === 0) {
           res.status(404).json({
             status: 404,
             message: "User not found",
-            error: err.toString(),
             datetime: new Date().toISOString(),
           });
         } else {
-          const user = result.rows[0];
+          const user = result[0];
+          console.log(user);
           if (user.password === req.body.password) {
             const payload = {
               id: user.id,
@@ -106,12 +110,12 @@ const authController = {
 
             const userInfo = {
               id: user.id,
-              firstName: user.firstname,
-              lastName: user.lastname,
-              emailAdress: user.emailadress,
-              phoneNumber: user.phonenumber,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              emailAdress: user.emailAdress,
+              phoneNumber: user.phoneNumber,
               roles: user.roles,
-              isActive: user.isactive,
+              isActive: user.isActive,
               street: user.street,
               city: user.city,
               token: jwt.sign(payload, jwtSecretKey, { expiresIn: "2h" }),
@@ -119,13 +123,13 @@ const authController = {
             res.status(200).json({
               status: 200,
               message: "Login successful",
-              user: userInfo,
+              data: userInfo,
               datetime: new Date().toISOString(),
             });
           } else {
             res.status(400).json({
               status: 400,
-              message: "Wrong password",
+              message: "Wrong password or email combination",
               datetime: new Date().toISOString(),
             });
           }
