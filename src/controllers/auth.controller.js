@@ -189,8 +189,8 @@ const authController = {
                 city: user.city,
                 token: jwt.sign(payload, jwtSecretKey, { expiresIn: "2h" }),
               };
-              res.status(200).json({
-                status: 200,
+              res.status(201).json({
+                status: 201,
                 message: "User created",
                 data: userInfo,
                 datetime: new Date().toISOString(),

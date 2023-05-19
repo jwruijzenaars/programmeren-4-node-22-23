@@ -239,9 +239,9 @@ describe("user tests", () => {
         .post("/api/user")
         .send(expectedUser)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(201);
           res.body.should.have.property("message").eq("User created");
-          res.body.should.have.property("status").eq(200);
+          res.body.should.have.property("status").eq(201);
           res.body.should.have.property("data");
           res.body.data.should.be.a("object");
           res.body.data.should.have.property("id");
