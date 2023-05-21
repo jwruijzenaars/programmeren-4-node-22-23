@@ -22,7 +22,7 @@ module.exports = {
         password: process.env.TEST_DB_PASSWORD,
         port: process.env.TEST_DB_PORT || 3306,
         multipleStatements: true,
-        connectionLimit: 10,
+        connectionLimit: 50,
         waitForConnections: true,
         queueLimit: 0,
         idleTimeout: 10000,
